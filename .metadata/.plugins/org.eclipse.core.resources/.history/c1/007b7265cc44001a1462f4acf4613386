@@ -1,0 +1,13 @@
+
+public class MainApp {
+
+	public static void main(String[] args) {
+		//System.out.println("Hello App");
+		String hostName = "10.7.24.196";
+		String dbName = "paraskadb";
+		String userName = "vova";
+		String password = "Qwerty1-";
+		
+	}
+
+}

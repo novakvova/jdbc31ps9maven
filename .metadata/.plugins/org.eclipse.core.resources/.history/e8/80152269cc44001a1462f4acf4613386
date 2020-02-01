@@ -1,0 +1,26 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class MainApp {
+
+	public static void main(String[] args) {
+		//System.out.println("Hello App");
+		try {
+			String hostName = "10.7.24.196";
+			String dbName = "paraskadb";
+			String userName = "vova";
+			String password = "Qwerty1-";
+			Class.forName("org.postgresql.Driver"); 
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+
+}
