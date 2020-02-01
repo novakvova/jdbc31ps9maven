@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 public class MainApp {
 
@@ -12,8 +13,35 @@ public class MainApp {
 		// System.out.println("Hello App");
 		try {
 			Connection conn = GetConnection();
-			//GetVersionPostgres(conn);
-			InsertAuthor(conn,"Семен");
+			// GetVersionPostgres(conn);
+			int action = 0;
+			do {
+				System.out.println("Оберіть операцію");
+				System.out.println("0.Вихід");
+				System.out.println("1.Показати усі записи");
+				System.out.println("2.Додати");
+				System.out.println("3.Видалити");
+				Scanner in = new Scanner(System.in);
+				action = in.nextInt();
+				switch (action) {
+				case 1: {
+					SelectAuthors(conn);
+					break;
+				}
+				case 2: {
+					System.out.println("Введіть ім'я");
+					String name = in.next();
+					InsertAuthor(conn, name);
+					break;
+				}
+				case 3: {
+					System.out.println("Введіть id");
+					int id = in.nextInt();
+					DeleteAuthor(conn, id);
+					break;
+				}
+				}
+			} while (action != 0);
 
 		} catch (Exception e) {
 			System.out.println("У нас проблеми " + e.getMessage());
@@ -31,8 +59,7 @@ public class MainApp {
 		return conn;
 	}
 
-	private static void GetVersionPostgres(Connection conn)
-			throws SQLException	{
+	private static void GetVersionPostgres(Connection conn) throws SQLException {
 		Statement st = conn.createStatement();
 		ResultSet rs = st.executeQuery("SELECT VERSION()");
 
@@ -41,12 +68,29 @@ public class MainApp {
 		}
 	}
 
-	private static void InsertAuthor(Connection conn, String name)
-			throws SQLException	{
-        String query = "INSERT INTO authors(name) VALUES(?)";
-        PreparedStatement pst = conn.prepareStatement(query);
-        pst.setString(1, name);
-        pst.executeUpdate();
+	private static void InsertAuthor(Connection conn, String name) throws SQLException {
+		String query = "INSERT INTO authors(name) VALUES(?)";
+		PreparedStatement pst = conn.prepareStatement(query);
+		pst.setString(1, name);
+		pst.executeUpdate();
+	}
+
+	private static void SelectAuthors(Connection conn) throws SQLException {
+		PreparedStatement pst = conn.prepareStatement("SELECT id, name FROM authors");
+		ResultSet rs = pst.executeQuery();
+		while (rs.next()) {
+
+			System.out.print(rs.getInt(1));
+			System.out.print(": ");
+			System.out.println(rs.getString(2));
+		}
+	}
+
+	private static void DeleteAuthor(Connection conn, int id) throws SQLException {
+		String query = "DELETE FROM authors WHERE id = ?";
+		PreparedStatement pst = conn.prepareStatement(query);
+		pst.setInt(1, id);
+		pst.executeUpdate();
 	}
 
 }
